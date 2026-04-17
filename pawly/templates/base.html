@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>{% block title %}PAWLY — ძაღლის ტანსაცმელი{% endblock %}</title>
+
+  <!-- Security -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://cdn.jsdelivr.net https://fonts.googleapis.com https://fonts.gstatic.com https://placehold.co https://image2url.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net;">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar navbar-expand-lg pawly-nav sticky-top">
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center gap-2" href="{{ url_for('index') }}">
+      <span class="paw-icon">🐾</span>
+      <span class="brand-text">PAWLY</span>
+      <small class="brand-sub">•პოლი</small>
+    </a>
+
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navMain">
+      <ul class="navbar-nav ms-auto gap-1 align-items-lg-center">
+        <li class="nav-item">
+          <a class="nav-link {% if request.endpoint == 'index' %}active{% endif %}" href="{{ url_for('index') }}">მთავარი</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.endpoint == 'shop' %}active{% endif %}" href="{{ url_for('shop') }}">მაღაზია</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.endpoint == 'about' %}active{% endif %}" href="{{ url_for('about') }}">ჩვენ შესახებ</a>
+        </li>
+        <li class="nav-item ms-lg-2">
+          <a class="btn btn-pawly btn-sm" href="{{ url_for('contact') }}">შეკვეთა</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== FLASH MESSAGES ===== -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="container mt-3">
+      {% for cat, msg in messages %}
+        <div class="alert alert-{{ cat }} alert-dismissible fade show" role="alert">
+          {{ msg }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+<!-- ===== PAGE CONTENT ===== -->
+{% block content %}{% endblock %}
+
+<!-- ===== FOOTER ===== -->
+<footer class="pawly-footer mt-auto">
+  <div class="container py-5">
+    <div class="row g-4 align-items-start">
+      <div class="col-lg-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+          <span style="font-size:1.8rem">🐾</span>
+          <span class="brand-text" style="font-size:1.6rem">PAWLY</span>
+        </div>
+        <p class="footer-tagline">ყოველი ძაღლი იმსახურებს სტილს.<br>Every dog deserves style.</p>
+      </div>
+      <div class="col-lg-2 col-6">
+        <h6 class="footer-heading">ნავიგაცია</h6>
+        <ul class="list-unstyled footer-links">
+          <li><a href="{{ url_for('index') }}">მთავარი</a></li>
+          <li><a href="{{ url_for('shop') }}">მაღაზია</a></li>
+          <li><a href="{{ url_for('about') }}">ჩვენ შესახებ</a></li>
+          <li><a href="{{ url_for('contact') }}">კონტაქტი</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-3 col-6">
+        <h6 class="footer-heading">სოცმედია</h6>
+        <ul class="list-unstyled footer-links">
+          <li><a href="#"><i class="bi bi-tiktok me-1"></i> TikTok: @shop_pawly_</a></li>
+          <li><a href="#"><i class="bi bi-instagram me-1"></i> IG: pawly_dogwear</a></li>
+          <li><a href="#"><i class="bi bi-facebook me-1"></i> FB: PAWLY</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-3">
+        <h6 class="footer-heading">კონტაქტი</h6>
+        <p class="footer-contact">
+          <i class="bi bi-envelope me-1"></i> info@pawly.ge<br>
+          <i class="bi bi-geo-alt me-1"></i> თბილისი, საქართველო
+        </p>
+      </div>
+    </div>
+    <hr class="footer-divider">
+    <p class="text-center footer-copy mb-0">© 2025 PAWLY. ყველა უფლება დაცულია. Made with 🐾 in Georgia.</p>
+  </div>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>
