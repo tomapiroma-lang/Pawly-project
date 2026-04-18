@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% block title %}PAWLY — კონტაქტი{% endblock %}
+
+{% block content %}
+
+<section class="page-hero">
+  <div class="container py-5 text-center">
+    <span class="section-eyebrow">დაგვიკავშირდი</span>
+    <h1 class="page-hero-title">კონტაქტი</h1>
+    <p class="page-hero-sub">შეკვეთა, კითხვა ან უბრალოდ გამარჯობა — ყველაფერი კეთდება!</p>
+  </div>
+</section>
+
+<section class="py-6">
+  <div class="container">
+    <div class="row g-5 justify-content-center">
+
+      <!-- Contact Info -->
+      <div class="col-lg-4">
+        <div class="contact-info-card">
+          <h4 class="mb-4">📬 როგორ დაგვიკავშირდე</h4>
+          <div class="contact-info-item">
+            <div class="contact-info-icon"><i class="bi bi-tiktok"></i></div>
+            <div>
+              <strong>TikTok</strong><br>
+              <a href="https://www.tiktok.com/@pawly_1312">@shop_pawly_</a>
+            </div>
+          </div>
+          <div class="contact-info-item">
+            <div class="contact-info-icon"><i class="bi bi-instagram"></i></div>
+            <div>
+              <strong>Instagram</strong><br>
+              <a href="https://www.instagram.com/pawly_dogwear/" target="_blank">@pawly_dogwear</a>
+            </div>
+          </div>
+          <div class="contact-info-item">
+            <div class="contact-info-icon"><i class="bi bi-facebook"></i></div>
+            <div>
+              <strong>Facebook</strong><br>
+              <a href="https://www.facebook.com/profile.php?id=61588636095331" target="_blank">PAWLY</a>
+            </div>
+          </div>
+          <div class="contact-info-item">
+            <div class="contact-info-icon"><i class="bi bi-geo-alt"></i></div>
+            <div>
+              <strong>მდებარეობა</strong><br>
+              თბილისი, საქართველო
+            </div>
+          </div>
+          <div class="contact-info-item">
+            <div class="contact-info-icon"><i class="bi bi-clock"></i></div>
+            <div>
+              <strong>სამუშაო საათები</strong><br>
+              ორ–შაბ: 10:00 – 20:00
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact Form -->
+      <div class="col-lg-7">
+        <div class="contact-form-card">
+          <h4 class="mb-4">🐾 შეტყობინება</h4>
+          <form method="POST" action="{{ url_for('contact') }}" novalidate id="contactForm">
+            {{ form.hidden_tag() }}
+
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label" for="name">{{ form.name.label.text }}</label>
+                {{ form.name(class="form-control" + (" is-invalid" if form.name.errors else ""), id="name", placeholder="მაგ: გიორგი გელაშვილი") }}
+                {% for err in form.name.errors %}<div class="invalid-feedback">{{ err }}</div>{% endfor %}
+              </div>
+              <div class="col-md-6">
+                <label class="form-label" for="email">{{ form.email.label.text }}</label>
+                {{ form.email(class="form-control" + (" is-invalid" if form.email.errors else ""), id="email", placeholder="you@example.com") }}
+                {% for err in form.email.errors %}<div class="invalid-feedback">{{ err }}</div>{% endfor %}
+              </div>
+              <div class="col-md-6">
+                <label class="form-label" for="phone">{{ form.phone.label.text }}</label>
+                {{ form.phone(class="form-control" + (" is-invalid" if form.phone.errors else ""), id="phone", placeholder="+995 5XX XXX XXX") }}
+                {% for err in form.phone.errors %}<div class="invalid-feedback">{{ err }}</div>{% endfor %}
+              </div>
+              <div class="col-md-6">
+                <label class="form-label" for="subject">{{ form.subject.label.text }}</label>
+                {{ form.subject(class="form-select" + (" is-invalid" if form.subject.errors else ""), id="subject") }}
+                {% for err in form.subject.errors %}<div class="invalid-feedback">{{ err }}</div>{% endfor %}
+              </div>
+              <div class="col-12">
+                <label class="form-label" for="message">{{ form.message.label.text }}</label>
+                {{ form.message(class="form-control" + (" is-invalid" if form.message.errors else ""), id="message", rows="5", placeholder="შეიყვანე შეტყობინება...") }}
+                {% for err in form.message.errors %}<div class="invalid-feedback">{{ err }}</div>{% endfor %}
+              </div>
+              <div class="col-12 mt-2">
+                <button type="submit" class="btn btn-pawly btn-lg w-100" id="submitBtn">
+                  <span id="btnText"><i class="bi bi-send me-2"></i>გაგზავნა</span>
+                  <span id="btnSpinner" class="d-none">
+                    <span class="spinner-border spinner-border-sm me-2"></span>იგზავნება...
+                  </span>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.getElementById("contactForm").addEventListener("submit", function() {
+  document.getElementById("btnText").classList.add("d-none");
+  document.getElementById("btnSpinner").classList.remove("d-none");
+  document.getElementById("submitBtn").disabled = true;
+});
+</script>
+{% endblock %}
