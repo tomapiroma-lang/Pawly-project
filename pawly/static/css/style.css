@@ -432,3 +432,119 @@ img { max-width: 100%; }
   .stat-divider { display: none; }
   .feature-item { font-size: .8rem; }
 }
+
+/* ========================================
+   MOBILE IMPROVEMENTS
+   ======================================== */
+
+/* ---- MOBILE NAVBAR ---- */
+@media (max-width: 991px) {
+  .pawly-nav .navbar-collapse {
+    background: #fff;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+    padding: 1rem;
+    margin-top: .5rem;
+  }
+  .nav-link {
+    padding: .75rem 1rem !important;
+    font-size: 1.05rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-link:last-of-type { border-bottom: none; }
+  .btn-pawly.btn-sm {
+    width: 100%;
+    text-align: center;
+    padding: .75rem !important;
+    margin-top: .5rem;
+    font-size: 1rem;
+  }
+}
+
+/* ---- MOBILE HERO ---- */
+@media (max-width: 768px) {
+  .hero-section { padding: 1rem 0 2rem; }
+  .hero-title { font-size: 2.4rem; }
+  .hero-desc { font-size: 1rem; }
+  .hero-img {
+    width: min(280px, 85vw);
+    height: min(280px, 85vw);
+  }
+  .hero-badge {
+    font-size: .75rem;
+    padding: .4rem .8rem;
+    bottom: 10px;
+    right: 5px;
+  }
+  .btn-pawly.btn-lg, .btn-outline-pawly.btn-lg {
+    width: 100%;
+    text-align: center;
+    padding: .8rem 1rem;
+    font-size: 1rem;
+  }
+  .d-flex.gap-3.flex-wrap.mt-4 { flex-direction: column; }
+}
+
+/* ---- MOBILE FEATURES STRIP ---- */
+@media (max-width: 576px) {
+  .feature-item {
+    font-size: .75rem;
+    padding: .75rem .5rem;
+    gap: .4rem;
+  }
+  .feature-icon { font-size: 1.1rem; }
+}
+
+/* ---- MOBILE PRODUCT CARDS ---- */
+@media (max-width: 576px) {
+  .product-card { border-radius: 12px; }
+  .product-name { font-size: 1rem; }
+  .product-price { font-size: 1.1rem; }
+  .product-body { padding: 1rem; }
+}
+
+/* ---- MOBILE CONTACT ---- */
+@media (max-width: 991px) {
+  .contact-form-card { padding: 1.5rem; }
+  .contact-info-card { padding: 1.5rem; margin-bottom: 1rem; }
+}
+
+/* ---- MOBILE CTA ---- */
+@media (max-width: 768px) {
+  .cta-card { padding: 2.5rem 1.5rem; border-radius: 16px; }
+  .cta-title { font-size: 1.6rem; }
+  .cta-btn { width: 100%; }
+}
+
+/* ---- MOBILE FOOTER ---- */
+@media (max-width: 768px) {
+  .pawly-footer .row { text-align: center; }
+  .footer-links { align-items: center; }
+  .footer-contact { text-align: center; }
+}
+
+/* ---- MOBILE ABOUT ---- */
+@media (max-width: 768px) {
+  .about-img-main { max-height: 280px; }
+  .value-card { padding: 1.5rem .75rem; }
+  .value-icon { font-size: 2rem; }
+}
+
+/* ---- TOUCH IMPROVEMENTS ---- */
+@media (hover: none) {
+  .product-overlay { display: none; }
+  .btn-pawly:hover { transform: none; }
+  .btn-outline-pawly:hover { transform: none; }
+  .product-card:hover { transform: none; }
+}
+
+/* ---- SAFE AREA (iPhone notch) ---- */
+@supports (padding: max(0px)) {
+  .pawly-nav {
+    padding-left: max(.75rem, env(safe-area-inset-left));
+    padding-right: max(.75rem, env(safe-area-inset-right));
+  }
+  .pawly-footer {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+}
