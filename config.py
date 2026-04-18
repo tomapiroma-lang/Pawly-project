@@ -2,6 +2,9 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv(".env.local")
+# პოულობს იმ საქაღალდის გზას, სადაც ეს ფაილი დევს
+basedir = os.path.abspath(os.path.dirname(__file__))
+load_dotenv(os.path.join(basedir, ".env.local"))   
 
 class Config:
     SECRET_KEY = os.environ.get("FLASK_SECRET_KEY") or "fallback-dev-key-change-in-prod"

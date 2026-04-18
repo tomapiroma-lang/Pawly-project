@@ -30,15 +30,6 @@ PRODUCTS = [
         "category": "მაისური",
     },
     {
-        "id": 3,
-        "name": "წითელი მაისური",
-        "description": "სუფთა წითელი მაისური — კომფორტული და სტილური. L ზომა.",
-        "price": "18 ₾ (L)",
-        "badge": None,
-        "image": "/static/images/03_red_plain.jpg",
-        "category": "მაისური",
-    },
-    {
         "id": 4,
         "name": "საწვიმარი — ყვითელი",
         "description": "ყვითელი წყალგაუმტარი საწვიმარი ზოლიანი შიგნით. S და M ზომები ხელმისაწვდომია.",
@@ -168,18 +159,19 @@ def contact():
     form = ContactForm()
     if form.validate_on_submit():
         try:
+# წაშალე 'app.' და დატოვე მხოლოდ Message
             msg = Message(
-                subject=f"[PAWLY] {form.subject.data} — {form.name.data}",
-                sender=app.config["MAIL_USERNAME"],
-                recipients=[app.config["MAIL_RECEIVER"]],
-                body=(
-                    f"სახელი: {form.name.data}\n"
-                    f"ელ-ფოსტა: {form.email.data}\n"
-                    f"ტელეფონი: {form.phone.data or '—'}\n"
-                    f"თემა: {form.subject.data}\n\n"
-                    f"{form.message.data}"
-                ),
-            )
+            subject=f"[PAWLY] {form.subject.data} — {form.name.data}",
+            sender=app.config["MAIL_USERNAME"],
+            recipients=[app.config["MAIL_RECEIVER"]],
+            body=(
+                f"სახელი: {form.name.data}\n"
+                f"ელ-ფოსტა: {form.email.data}\n"
+                f"ტელეფონი: {form.phone.data or '—'}\n"
+                f"თემა: {form.subject.data}\n\n"
+                f"{form.message.data}"
+            ),  
+        )
             mail.send(msg)
             flash("შეტყობინება წარმატებით გაიგზავნა! მალე დაგიკავშირდებით. 🐾", "success")
         except Exception as e:
