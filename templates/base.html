@@ -22,7 +22,10 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
 
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-  <link rel="icon" type="image/jpeg" href="{{ url_for('static', filename='favicon.jpg') }}">
+  <!-- ===== PAGE HERO IMAGE ===== -->
+  <div class="text-center py-3">
+    <img src="{{ url_for('static', filename='https://www.image2url.com/r2/default/images/1776539105431-075bfaf2-e043-463f-bdda-d8dbacd97955.jpg') }}" alt="PAWLY" height="120">
+  </div>
   {% block extra_css %}{% endblock %}
 </head>
 <body>
