@@ -4,12 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>{% block title %}PAWLY — ძაღლის ტანსაცმელი{% endblock %}</title>
+  <title>{% block title %}PAWLY — ძაղლის ტანსაცმელი{% endblock %}</title>
 
   <!-- Security -->
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://cdn.jsdelivr.net https://fonts.googleapis.com https://fonts.gstatic.com https://placehold.co https://image2url.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net;">
   <meta name="referrer" content="strict-origin-when-cross-origin">
-
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,10 +21,222 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
 
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-  <!-- ===== PAGE HERO IMAGE ===== -->
-  <div class="text-center py-3">
-    <img src="{{ url_for('static', filename='https://www.image2url.com/r2/default/images/1776539105431-075bfaf2-e043-463f-bdda-d8dbacd97955.jpg') }}" alt="PAWLY" height="120">
-  </div>
+  
+  <!-- Chatbot Styles -->
+  <style>
+    .chatbot-widget {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 360px;
+      max-width: 90vw;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      max-height: 500px;
+      font-family: 'DM Sans', sans-serif;
+    }
+    
+    .chatbot-header {
+      background: linear-gradient(135deg, #0F6E56 0%, #085041 100%);
+      color: white;
+      padding: 16px;
+      border-radius: 12px 12px 0 0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .chatbot-header h4 {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 600;
+    }
+    
+    .chatbot-icon {
+      font-size: 24px;
+    }
+    
+    .chatbot-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      background: #f9f9f9;
+    }
+    
+    .message {
+      display: flex;
+      gap: 8px;
+      animation: slideIn 0.3s ease;
+    }
+    
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .message.user {
+      justify-content: flex-end;
+    }
+    
+    .message.bot {
+      justify-content: flex-start;
+    }
+    
+    .message-bubble {
+      max-width: 80%;
+      padding: 12px 14px;
+      border-radius: 12px;
+      font-size: 14px;
+      line-height: 1.4;
+      word-wrap: break-word;
+    }
+    
+    .message.user .message-bubble {
+      background: #0F6E56;
+      color: white;
+      border-bottom-right-radius: 4px;
+    }
+    
+    .message.bot .message-bubble {
+      background: white;
+      color: #333;
+      border: 1px solid #e0e0e0;
+      border-bottom-left-radius: 4px;
+    }
+    
+    .typing-indicator {
+      display: flex;
+      gap: 4px;
+      padding: 12px 14px;
+    }
+    
+    .typing-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #0F6E56;
+      animation: typing 1.4s infinite;
+    }
+    
+    .typing-dot:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+    
+    .typing-dot:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+    
+    @keyframes typing {
+      0%, 60%, 100% {
+        opacity: 0.5;
+        transform: translateY(0);
+      }
+      30% {
+        opacity: 1;
+        transform: translateY(-8px);
+      }
+    }
+    
+    .chatbot-send-btn {
+      background: #0F6E56;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 14px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+    
+    .chatbot-send-btn:hover {
+      background: #085041;
+    }
+
+    .quick-replies {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+      animation: slideIn 0.3s ease;
+    }
+
+    .quick-reply-btn {
+      background: #0F6E56;
+      color: white;
+      border: none;
+      border-radius: 14px;
+      border-bottom-right-radius: 4px;
+      padding: 10px 14px;
+      font-size: 14px;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer;
+      text-align: right;
+      max-width: 85%;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    .quick-reply-btn:hover {
+      background: #085041;
+    }
+
+    .quick-reply-btn:active {
+      transform: scale(0.97);
+    }
+    
+    .chatbot-toggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #0F6E56 0%, #085041 100%);
+      color: white;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      box-shadow: 0 4px 12px rgba(15, 110, 86, 0.3);
+      z-index: 999;
+      transition: transform 0.2s;
+    }
+    
+    .chatbot-toggle:hover {
+      transform: scale(1.1);
+    }
+    
+    .chatbot-toggle.hidden {
+      display: none;
+    }
+    
+    .chatbot-widget.hidden {
+      display: none;
+    }
+    
+    @media (max-width: 480px) {
+      .chatbot-widget {
+        width: calc(100vw - 20px);
+        max-height: 60vh;
+      }
+    }
+  </style>
+  
   {% block extra_css %}{% endblock %}
 </head>
 <body>
@@ -79,6 +290,28 @@
 <!-- ===== PAGE CONTENT ===== -->
 {% block content %}{% endblock %}
 
+<!-- ===== CHATBOT WIDGET ===== -->
+<button class="chatbot-toggle" id="chatbotToggle" title="გახსენი მხარდამჭერი ბოტი">
+  🤖
+</button>
+
+<div class="chatbot-widget hidden" id="chatbotWidget">
+  <div class="chatbot-header">
+    <span class="chatbot-icon">🐾</span>
+    <h4>PAWLY დამხმარე</h4>
+    <button style="background: none; border: none; color: white; cursor: pointer; margin-left: auto; font-size: 20px;" id="closeChatbot">&times;</button>
+  </div>
+  
+  <div class="chatbot-messages" id="chatbotMessages">
+    <div class="message bot">
+      <div class="message-bubble">
+        გამარჯობა! 👋 მე ვარი PAWLY-ს ბოტი. შეგიძლია დამე კითხვა PAWLY-ს შესახებ, ფასების, მიტანის ან ზომების შესახებ!
+      </div>
+    </div>
+  </div>
+  
+</div>
+
 <!-- ===== FOOTER ===== -->
 <footer class="pawly-footer mt-auto">
   <div class="container py-5">
@@ -123,6 +356,159 @@
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+<!-- Chatbot Script -->
+<script>
+const chatbotToggle = document.getElementById('chatbotToggle');
+const chatbotWidget = document.getElementById('chatbotWidget');
+const closeChatbot = document.getElementById('closeChatbot');
+const chatbotMessages = document.getElementById('chatbotMessages');
+
+// Predefined questions the user can pick from instead of typing freely.
+// "label" is what's shown on the button / bubble, "value" is what gets sent to the API.
+const QUICK_QUESTIONS = [
+  { label: "ვინ ხართ?", value: "ვინ ხართ" },
+  { label: "რა პროდუქტები გაქვთ?", value: "რა პროდუქტი გაქვთ" },
+  { label: "რა ფასები გაქვთ?", value: "ფასი" },
+  { label: "როგორ მუშაობს მიტანა?", value: "მიტანა" },
+  { label: "რა ზომები გაქვთ?", value: "ზომა" },
+  { label: "რამდენად ხარისხიანია პროდუქტები?", value: "ხარისხი" },
+  { label: "საიდან ხართ?", value: "საიდან ხართ" },
+  { label: "სად შემიძლია დაგიკავშირდეთ?", value: "დაკავშირება" },
+];
+
+let quickRepliesEl = null;
+
+// Toggle chatbot
+chatbotToggle.addEventListener('click', () => {
+  chatbotWidget.classList.toggle('hidden');
+  chatbotToggle.classList.toggle('hidden');
+  if (!chatbotWidget.classList.contains('hidden') && !quickRepliesEl) {
+    renderQuickReplies();
+  }
+});
+
+// Close chatbot
+closeChatbot.addEventListener('click', () => {
+  chatbotWidget.classList.add('hidden');
+  chatbotToggle.classList.remove('hidden');
+});
+
+// Auto-scroll to bottom
+function scrollToBottom() {
+  chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+}
+
+// Add message to chat
+function addMessage(text, isUser = false) {
+  const messageDiv = document.createElement('div');
+  messageDiv.className = `message ${isUser ? 'user' : 'bot'}`;
+  
+  const bubble = document.createElement('div');
+  bubble.className = 'message-bubble';
+  bubble.textContent = text;
+  
+  messageDiv.appendChild(bubble);
+  chatbotMessages.appendChild(messageDiv);
+  scrollToBottom();
+}
+
+// Show typing indicator
+function showTyping() {
+  const messageDiv = document.createElement('div');
+  messageDiv.className = 'message bot';
+  messageDiv.id = 'typingIndicator';
+  
+  const typing = document.createElement('div');
+  typing.className = 'typing-indicator';
+  typing.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+  
+  messageDiv.appendChild(typing);
+  chatbotMessages.appendChild(messageDiv);
+  scrollToBottom();
+}
+
+// Remove typing indicator
+function removeTyping() {
+  const typing = document.getElementById('typingIndicator');
+  if (typing) typing.remove();
+}
+
+// Render the tappable question options as bubbles at the bottom of the chat
+function renderQuickReplies() {
+  removeQuickReplies();
+
+  quickRepliesEl = document.createElement('div');
+  quickRepliesEl.className = 'quick-replies';
+  quickRepliesEl.id = 'quickReplies';
+
+  QUICK_QUESTIONS.forEach((q) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'quick-reply-btn';
+    btn.textContent = q.label;
+    btn.addEventListener('click', () => selectQuestion(q));
+    quickRepliesEl.appendChild(btn);
+  });
+
+  chatbotMessages.appendChild(quickRepliesEl);
+  scrollToBottom();
+}
+
+function removeQuickReplies() {
+  const existing = document.getElementById('quickReplies');
+  if (existing) existing.remove();
+  quickRepliesEl = null;
+}
+
+// User tapped one of the predefined questions
+async function selectQuestion(question) {
+  // Hide the options while we fetch the answer
+  removeQuickReplies();
+
+  // Show what the user "asked" as a normal chat bubble
+  addMessage(question.label, true);
+
+  // Show typing indicator
+  showTyping();
+
+  try {
+    // Get CSRF token from meta tag if available
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+
+    const headers = {
+      'Content-Type': 'application/json',
+    };
+
+    if (csrfToken) {
+      headers['X-CSRFToken'] = csrfToken;
+    }
+
+    const response = await fetch('/api/chat', {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify({ message: question.value })
+    });
+
+    const data = await response.json();
+    removeTyping();
+
+    if (response.ok) {
+      addMessage(data.answer, false);
+    } else {
+      addMessage('ვერ გავიგე კითხვა. სცადე მეორედ!', false);
+    }
+  } catch (error) {
+    removeTyping();
+    addMessage('შეცდომა დაკავშირებაში. სცადე მოგვიანებით.', false);
+    console.error('Chat error:', error);
+  }
+
+  // Bring the options back so the user can pick the next question
+  renderQuickReplies();
+}
+</script>
+
 {% block extra_js %}{% endblock %}
 </body>
 </html>

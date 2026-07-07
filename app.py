@@ -3,12 +3,20 @@ from flask_mail import Mail, Message
 from flask_wtf.csrf import CSRFProtect
 from config import Config
 from forms import ContactForm
+from blueprints import chatbot_bp
 
 app = Flask(__name__)
 app.config.from_object(Config)
 
 mail = Mail(app)
 csrf = CSRFProtect(app)
+
+# Register blueprints
+app.register_blueprint(chatbot_bp)
+
+# Exempt the chatbot API endpoint from CSRF protection
+# (safe to exempt because it's a simple read-only API call, not sensitive operations)
+app.view_functions['chatbot.chat'] = csrf.exempt(app.view_functions['chatbot.chat'])
 
 PRODUCTS = [
     {
@@ -31,7 +39,7 @@ PRODUCTS = [
     },
     {
         "id": 4,
-        "name": "საწვიმარი — ყვითელი",
+        "name": "საწვიმარი — ყვითალი",
         "description": "ყვითელი წყალგაუმტარი საწვიმარი ზოლიანი შიგნით. S და M ზომები ხელმისაწვდომია.",
         "price": "34 ₾ (S) / 38 ₾ (M)",
         "badge": "ახალი",
@@ -95,7 +103,7 @@ PRODUCTS = [
     {
         "id": 11,
         "name": "ფერადი ზოლიანი სვიტრი",
-        "description": "მრავალფერიანი ზოლიანი სვიტრი — წითელი საყელო, მწვანე ზოლები, ლურჯი და ყვითელი დეტალები. S და M ზომები.",
+        "description": "მრავალფერიანი ზოლიანი სვიტრი — წითელი საყელო, მწვანე ზოლები, ლურჯი და ყვითალი დეტალები. S და M ზომები.",
         "price": "24 ₾ (S) / 27 ₾ (M)",
         "badge": None,
         "image": "/static/images/11_colorful_striped_sweater.jpg",
